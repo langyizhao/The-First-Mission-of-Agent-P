@@ -35,9 +35,10 @@ export class Game {
     this.player = new Player(100, 100);
     this.sprites = new SpriteManager();
     // Instruct the game to load the tilesheets
-    this.sprites.loadImage('tileset', '/Environment.jpeg');
-    this.sprites.loadImage('player', '/player.png');
-    this.sprites.loadImage('enemy', '/enemy.png');
+    const baseUrl = import.meta.env.BASE_URL;
+    this.sprites.loadImage('tileset', `${baseUrl}Environment.jpeg`);
+    this.sprites.loadImage('player', `${baseUrl}player.png`);
+    this.sprites.loadImage('enemy', `${baseUrl}enemy.png`);
     this.initLevel();
   }
 
