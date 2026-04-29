@@ -220,9 +220,16 @@ export class Enemy extends Entity {
     }
 }
 
-export class StationaryEnemy extends Enemy {
+export class SlowEnemy extends Enemy {
   constructor(x: number, y: number) {
     super(x, y, 40, 40, '#ef4444', 3);
+    this.speed = 40; // Slow speed
+  }
+
+  update(dt: number, game: Game) {
+    const dx = game.player.x - this.x;
+    const dy = game.player.y - this.y;
+    this.updateMovement(dt, game, dx, dy);
   }
 }
 

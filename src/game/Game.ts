@@ -1,6 +1,10 @@
 import { InputHandler } from './Input';
-import { Player, Enemy, StationaryEnemy, FastEnemy, HeavyEnemy, Projectile, Entity, Direction } from './Entities';
+import { Player, Enemy, SlowEnemy, FastEnemy, HeavyEnemy, Projectile, Entity, Direction } from './Entities';
 import { SpriteManager } from './SpriteManager';
+
+import envImage from '../assets/Environment.jpeg';
+import playerImage from '../assets/player.png';
+import enemyImage from '../assets/enemy.png';
 
 export class Game {
   input: InputHandler;
@@ -35,11 +39,9 @@ export class Game {
     this.player = new Player(100, 100);
     this.sprites = new SpriteManager();
     // Instruct the game to load the tilesheets
-    // @ts-ignore
-    const baseUrl = import.meta.env.BASE_URL;
-    this.sprites.loadImage('tileset', `${baseUrl}Environment.jpeg`);
-    this.sprites.loadImage('player', `${baseUrl}player.png`);
-    this.sprites.loadImage('enemy', `${baseUrl}enemy.png`);
+    this.sprites.loadImage('tileset', envImage);
+    this.sprites.loadImage('player', playerImage);
+    this.sprites.loadImage('enemy', enemyImage);
     this.initLevel();
   }
 
@@ -48,8 +50,8 @@ export class Game {
     this.projectiles = [];
     
     // Spawn basic enemy
-    this.enemies.push(new StationaryEnemy(400, 100));
-    this.enemies.push(new StationaryEnemy(100, 400));
+    this.enemies.push(new SlowEnemy(500, 100)); // right side
+    this.enemies.push(new SlowEnemy(150, 400)); // left side, but not exactly under player
     
     // Spawn fast enemy
     this.enemies.push(new FastEnemy(600, 500));
