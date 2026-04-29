@@ -4,14 +4,14 @@ export class SpriteManager {
 
   loadImage(name: string, src: string) {
     const img = new Image();
-    img.src = src;
     img.onload = () => {
       this.loaded[name] = true;
     };
     img.onerror = () => {
-      console.warn(`Failed to load image: ${src}`);
+      console.error(`[SpriteManager] Failed to load image: ${src}`);
       this.loaded[name] = false;
     };
+    img.src = src;
     this.images[name] = img;
   }
 
