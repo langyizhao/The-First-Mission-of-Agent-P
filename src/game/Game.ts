@@ -2,9 +2,7 @@ import { InputHandler } from './Input';
 import { Player, Enemy, SlowEnemy, FastEnemy, HeavyEnemy, Projectile, Entity, Direction } from './Entities';
 import { SpriteManager } from './SpriteManager';
 
-import envImage from '../assets/Environment.jpeg';
-import playerImage from '../assets/player.png';
-import enemyImage from '../assets/enemy.png';
+import { envImageB64, playerImageB64, enemyImageB64 } from './assetsBase64';
 
 export class Game {
   input: InputHandler;
@@ -39,9 +37,9 @@ export class Game {
     this.player = new Player(100, 100);
     this.sprites = new SpriteManager();
     // Instruct the game to load the tilesheets
-    this.sprites.loadImage('tileset', envImage);
-    this.sprites.loadImage('player', playerImage);
-    this.sprites.loadImage('enemy', enemyImage);
+    this.sprites.loadImage('tileset', envImageB64);
+    this.sprites.loadImage('player', playerImageB64);
+    this.sprites.loadImage('enemy', enemyImageB64);
     this.initLevel();
   }
 
