@@ -337,7 +337,7 @@ export class Projectile extends Entity {
            this.y + this.h > other.y;
   }
 
-  draw(ctx: CanvasRenderingContext2D) {
+  draw(ctx: CanvasRenderingContext2D, time: number) {
     ctx.fillStyle = this.color;
     ctx.beginPath();
     ctx.arc(this.x + this.w/2, this.y + this.h/2, 6, 0, Math.PI * 2);
