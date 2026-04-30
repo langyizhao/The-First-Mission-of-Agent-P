@@ -217,7 +217,7 @@ export class Game {
         ctx.fillText('MISSION ACCOMPLISHED', cw / 2, ch / 2);
         ctx.fillStyle = 'white';
         ctx.font = '20px monospace';
-        ctx.fillText('Press any key to restart', cw / 2, ch / 2 + 40);
+        ctx.fillText('Press any key to replay', cw / 2, ch / 2 + 40);
         ctx.textAlign = 'left';
     }
   }
