@@ -48,12 +48,20 @@ export class Entity {
       this.toRemove = true;
     }
   }
+
+  intersects(other: Entity) {
+    return this.x < other.x + other.w &&
+           this.x + this.w > other.x &&
+           this.y < other.y + other.h &&
+           this.y + this.h > other.y;
+  }
 }
 
 export class Player extends Entity {
   lastShot: number = 0;
   isMoving: boolean = false;
   moveTimer: number = 0;
+  invulnerableTimer: number = 0;
 
   constructor(x: number, y: number) {
     super(x, y, 32, 48, '#3b82f6', 10);
@@ -76,6 +84,10 @@ export class Player extends Entity {
         this.moveTimer += dt;
     } else {
         this.moveTimer = 0;
+    }
+
+    if (this.invulnerableTimer > 0) {
+        this.invulnerableTimer -= dt;
     }
 
     // Normalize diagonal movement
@@ -108,6 +120,22 @@ export class Player extends Entity {
   }
 
   draw(ctx: CanvasRenderingContext2D, time: number, game?: Game) {
+    if (this.invulnerableTimer > 0 && Math.floor(time / 100) % 2 === 0) {
+        // Blink logic - don't draw player this frame
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.restore();
+        
+        // ensure HP bar is still drawn over the "invisible" player
+        if (this.hp < this.maxHp && this.hp > 0) {
+          ctx.fillStyle = 'red';
+          ctx.fillRect(this.x, this.y - 8, this.w, 4);
+          ctx.fillStyle = '#00ff00';
+          ctx.fillRect(this.x, this.y - 8, this.w * (this.hp / this.maxHp), 4);
+        }
+        return;
+    }
+
     ctx.save();
     ctx.translate(this.x, this.y);
 
@@ -294,6 +322,33 @@ export class HeavyEnemy extends Enemy {
   }
 }
 
+export class Briefcase extends Entity {
+  constructor(x: number, y: number) {
+    super(x, y, 48, 48, '#facc15', 1);
+  }
+
+  update(dt: number, game: Game) {
+    if (this.intersects(game.player)) {
+      this.toRemove = true;
+      game.gameState = 'won';
+      game.stateTime = 0;
+      game.input.keys = {};
+    }
+  }
+
+  draw(ctx: CanvasRenderingContext2D, time: number, game?: Game) {
+    const loaded = game?.sprites?.isLoaded('briefcase');
+    const img = game?.sprites?.getImage('briefcase');
+
+    if (loaded && img && img.width > 0) {
+      ctx.drawImage(img, this.x, this.y, this.w, this.h);
+    } else {
+      ctx.fillStyle = this.color;
+      ctx.fillRect(this.x, this.y, this.w, this.h);
+    }
+  }
+}
+
 export class Projectile extends Entity {
   vx: number = 0;
   vy: number = 0;
@@ -331,17 +386,14 @@ export class Projectile extends Entity {
         }
     } else {
         if (this.intersects(game.player)) {
-            game.player.takeDamage(1);
+            // Apply invulnerable system here as well to bullets
+            if (game.player.invulnerableTimer <= 0) {
+              game.player.takeDamage(1);
+              game.player.invulnerableTimer = 1.0;
+            }
             this.toRemove = true;
         }
     }
-  }
-
-  intersects(other: Entity) {
-    return this.x < other.x + other.w &&
-           this.x + this.w > other.x &&
-           this.y < other.y + other.h &&
-           this.y + this.h > other.y;
   }
 
   draw(ctx: CanvasRenderingContext2D, time: number) {

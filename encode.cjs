@@ -9,13 +9,13 @@ function encode(file, mime) {
 const env = encode('src/assets/Environment.jpeg', 'image/jpeg');
 const player = encode('src/assets/player.png', 'image/png');
 const enemy = encode('src/assets/enemy.png', 'image/png');
-const item = encode('src/assets/Item.jpeg', 'image/jpeg');
+const briefcase = encode('src/assets/briefcase.png', 'image/png');
 
 let content = `// Auto-generated. Do not edit.\n`;
 if (env) content += `export const envImageB64 = "${env}";\n`;
 if (player) content += `export const playerImageB64 = "${player}";\n`;
 if (enemy) content += `export const enemyImageB64 = "${enemy}";\n`;
-if (item) content += `export const itemImageB64 = "${item}";\n`;
+if (briefcase) content += `export const briefcaseImageB64 = "${briefcase}";\n`;
 
 fs.writeFileSync('src/game/assetsBase64.ts', content);
 console.log('Encoded successfully. Size:', content.length);

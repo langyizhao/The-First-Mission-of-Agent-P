@@ -1,9 +1,16 @@
 export class InputHandler {
   keys: { [key: string]: boolean } = {};
+  keyBuffer: string = '';
 
   constructor() {
     window.addEventListener('keydown', (e) => {
       this.keys[e.code] = true;
+      if (e.key && e.key.length === 1) {
+        this.keyBuffer += e.key.toUpperCase();
+        if (this.keyBuffer.length > 20) {
+          this.keyBuffer = this.keyBuffer.slice(-20);
+        }
+      }
       // Prevent default scrolling for Space and arrow keys
       if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) {
         e.preventDefault();
